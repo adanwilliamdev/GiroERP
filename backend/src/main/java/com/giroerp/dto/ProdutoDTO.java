@@ -14,33 +14,29 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProdutoDTO {
-
+    
     private Long id;
-
+    
     @NotBlank(message = "Código é obrigatório")
     @Size(min = 3, max = 50, message = "Código deve ter entre 3 e 50 caracteres")
     private String codigo;
-
+    
     @NotBlank(message = "Nome é obrigatório")
     @Size(min = 3, max = 100, message = "Nome deve ter entre 3 e 100 caracteres")
     private String nome;
-
+    
     private String descricao;
-
+    
     @NotNull(message = "Preço é obrigatório")
     @DecimalMin(value = "0.01", message = "Preço deve ser maior que zero")
-    @DecimalMax(value = "999999.99", message = "Preço deve ser menor que 1.000.000")
     private BigDecimal preco;
-
-    @NotNull(message = "Estoque é obrigatório")
-    @Min(value = 0, message = "Estoque não pode ser negativo")
+    
     private Integer estoque;
-
+    
     private String categoria;
-
+    
     private Boolean ativo;
-
+    
     private LocalDateTime createdAt;
-
     private LocalDateTime updatedAt;
 }

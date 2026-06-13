@@ -16,33 +16,36 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
 public class ProdutoController {
-
+    
     private final ProdutoService produtoService;
-
+    
     @PostMapping
     @Operation(summary = "Criar produto")
     public ResponseEntity<ProdutoDTO> create(@Valid @RequestBody ProdutoDTO produtoDTO) {
-        return ResponseEntity.ok(produtoService.create(produtoDTO));
+        System.out.println("Recebendo requisição POST /api/produtos");
+        System.out.println("Dados: " + produtoDTO);
+        ProdutoDTO saved = produtoService.create(produtoDTO);
+        return ResponseEntity.ok(saved);
     }
-
+    
     @GetMapping("/{id}")
     @Operation(summary = "Buscar produto por ID")
     public ResponseEntity<ProdutoDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(produtoService.findById(id));
     }
-
+    
     @GetMapping
     @Operation(summary = "Listar produtos")
     public ResponseEntity<Page<ProdutoDTO>> findAll(Pageable pageable) {
         return ResponseEntity.ok(produtoService.findAll(pageable));
     }
-
+    
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar produto")
     public ResponseEntity<ProdutoDTO> update(@PathVariable Long id, @Valid @RequestBody ProdutoDTO produtoDTO) {
         return ResponseEntity.ok(produtoService.update(id, produtoDTO));
     }
-
+    
     @DeleteMapping("/{id}")
     @Operation(summary = "Deletar produto")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

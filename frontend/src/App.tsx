@@ -1,7 +1,9 @@
+// src/App.tsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { useAuth } from './hooks/useAuth';
 import Layout from './components/Layout/Layout';
 import Login from './pages/Login';
@@ -13,20 +15,12 @@ import RelatoriosPage from './pages/RelatoriosPage';
 import ConfiguracoesPage from './pages/ConfiguracoesPage';
 import NovaVendaPage from './pages/Venda/NovaVendaPage';
 
-// Componente de rota protegida
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated } = useAuth();
-  console.log('ProtectedRoute - isAuthenticated:', isAuthenticated);
-  
-  if (!isAuthenticated) {
-    console.log('Redirecionando para login...');
-    return <Navigate to="/login" replace />;
-  }
-  
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
   return <>{children}</>;
 };
 
-// Componente principal com as rotas
 function AppRoutes() {
   return (
     <Routes>
@@ -53,8 +47,10 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <Toaster position="top-right" />
-        <AppRoutes />
+        <ThemeProvider>
+          <Toaster position="top-right" />
+          <AppRoutes />
+        </ThemeProvider>
       </AuthProvider>
     </Router>
   );

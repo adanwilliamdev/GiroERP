@@ -8,10 +8,15 @@ import {
   BarChart3, 
   Settings,
   TrendingUp,
-  LogOut
+  LogOut,
+  Sparkles
 } from 'lucide-react';
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  onClose?: () => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -20,60 +25,54 @@ const Sidebar: React.FC = () => {
   };
 
   const menuItems = [
-    { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard', color: 'text-blue-400' },
-    { path: '/produtos', icon: Package, label: 'Produtos', color: 'text-emerald-400' },
-    { path: '/clientes', icon: Users, label: 'Clientes', color: 'text-purple-400' },
-    { path: '/vendas', icon: ShoppingCart, label: 'Vendas', color: 'text-orange-400' },
-    { path: '/relatorios', icon: BarChart3, label: 'Relatórios', color: 'text-cyan-400' },
-    { path: '/configuracoes', icon: Settings, label: 'Configurações', color: 'text-gray-400' },
+    { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+    { path: '/produtos', icon: Package, label: 'Produtos' },
+    { path: '/clientes', icon: Users, label: 'Clientes' },
+    { path: '/vendas', icon: ShoppingCart, label: 'Vendas' },
+    { path: '/relatorios', icon: BarChart3, label: 'Relatórios' },
+    { path: '/configuracoes', icon: Settings, label: 'Configurações' },
   ];
 
   return (
-    <aside className="sidebar w-72 min-h-screen fixed left-0 top-0 overflow-y-auto">
-      <div className="p-6 border-b border-secondary-700/50">
+    <aside className="sidebar">
+      <div className="p-6 border-b border-gray-100">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-r from-primary-500 to-accent-500 rounded-xl flex items-center justify-center">
+          <div className="w-10 h-10 bg-gradient-to-r from-primary-500 to-primary-600 rounded-xl flex items-center justify-center shadow-soft">
             <TrendingUp className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-              GiroERP
-            </h1>
-            <p className="text-secondary-400 text-xs mt-0.5">Sistema de Gestão</p>
+            <h1 className="text-xl font-bold text-gray-900">GiroERP</h1>
+            <p className="text-xs text-gray-500">Sistema de Gestão</p>
           </div>
         </div>
       </div>
       
       <nav className="mt-6 px-3">
-        <p className="text-secondary-500 text-xs uppercase tracking-wider px-4 mb-3">Menu Principal</p>
         {menuItems.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}
+            onClick={onClose}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-3 mx-3 my-1 rounded-xl text-secondary-300 transition-all duration-300 hover:bg-white/10 hover:text-white hover:translate-x-1 ${
-                isActive ? 'bg-gradient-to-r from-primary-500/20 to-primary-600/20 text-white border-r-2 border-primary-500 shadow-lg' : ''
-              }`
+              `sidebar-item ${isActive ? 'sidebar-item-active' : ''}`
             }
           >
-            <item.icon size={20} className={item.color} />
-            <span className="flex-1">{item.label}</span>
+            <item.icon size={18} />
+            <span className="flex-1 text-sm font-medium">{item.label}</span>
             {item.label === 'Vendas' && (
-              <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-gradient-to-r from-green-100 to-green-200 text-green-800">
-                Novo
-              </span>
+              <Sparkles size={12} className="text-primary-500" />
             )}
           </NavLink>
         ))}
       </nav>
 
-      <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-secondary-700/50">
+      <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-100 bg-white">
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 px-4 py-3 mx-3 my-1 rounded-xl text-red-400 transition-all duration-300 hover:bg-red-500/10 w-full"
+          className="flex items-center gap-3 px-4 py-2.5 w-full rounded-xl text-red-600 transition-all duration-200 hover:bg-red-50"
         >
-          <LogOut size={20} />
-          <span>Sair</span>
+          <LogOut size={18} />
+          <span className="text-sm font-medium">Sair</span>
         </button>
       </div>
     </aside>

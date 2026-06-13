@@ -22,36 +22,39 @@ public class VendaService {
     private final ClienteRepository clienteRepository;
     private final UsuarioRepository usuarioRepository;
     private final ProdutoRepository produtoRepository;
-    private final ItemVendaRepository itemVendaRepository;
     
     @Transactional
     public VendaDTO create(VendaDTO vendaDTO) {
         System.out.println("Criando venda: " + vendaDTO);
         
-        // Buscar cliente
         Cliente cliente = clienteRepository.findById(vendaDTO.getClienteId())
-            .orElseThrow(() -> new RuntimeException("Cliente não encontrado: " + vendaDTO.getClienteId()));
+            .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
         
-        // Buscar usuário (admin padrão)
         Usuario usuario = usuarioRepository.findById(1L)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         
-        // Criar venda
         Venda venda = new Venda();
         venda.setNumero(generateNumeroVenda());
         venda.setCliente(cliente);
         venda.setUsuario(usuario);
         venda.setDataVenda(LocalDateTime.now());
         venda.setStatus("PENDENTE");
-        venda.setDesconto(BigDecimal.ZERO);
+        venda.setDesconto(vendaDTO.getDesconto() != null ? vendaDTO.getDesconto() : BigDecimal.ZERO);
         
-        // Calcular subtotal e criar itens
+        // Dados de pagamento
+        venda.setFormaPagamento(vendaDTO.getFormaPagamento());
+        venda.setNumeroParcelas(vendaDTO.getNumeroParcelas());
+        venda.setValorEntrada(vendaDTO.getValorEntrada());
+        venda.setValorParcela(vendaDTO.getValorParcela());
+        venda.setBandeiraCartao(vendaDTO.getBandeiraCartao());
+        venda.setUltimosDigitos(vendaDTO.getUltimosDigitos());
+        
         BigDecimal subtotal = BigDecimal.ZERO;
         List<ItemVenda> itens = new ArrayList<>();
         
         for (ItemVendaDTO itemDTO : vendaDTO.getItens()) {
             Produto produto = produtoRepository.findById(itemDTO.getProdutoId())
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado: " + itemDTO.getProdutoId()));
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
             
             ItemVenda item = new ItemVenda();
             item.setProduto(produto);
@@ -65,10 +68,9 @@ public class VendaService {
         }
         
         venda.setSubtotal(subtotal);
-        venda.setTotal(subtotal);
+        venda.setTotal(subtotal.subtract(venda.getDesconto()));
         venda.setItens(itens);
         
-        // Salvar venda
         Venda saved = vendaRepository.save(venda);
         System.out.println("Venda salva com ID: " + saved.getId());
         
@@ -83,14 +85,14 @@ public class VendaService {
     
     public VendaDTO findById(Long id) {
         Venda venda = vendaRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Venda não encontrada: " + id));
+            .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
         return convertToDTO(venda);
     }
     
     @Transactional
     public VendaDTO updateStatus(Long id, String status) {
         Venda venda = vendaRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Venda não encontrada: " + id));
+            .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
         venda.setStatus(status);
         Venda saved = vendaRepository.save(venda);
         return convertToDTO(saved);
@@ -111,6 +113,15 @@ public class VendaService {
         dto.setDesconto(venda.getDesconto());
         dto.setTotal(venda.getTotal());
         dto.setStatus(venda.getStatus());
+        
+        // Dados de pagamento
+        dto.setFormaPagamento(venda.getFormaPagamento());
+        dto.setNumeroParcelas(venda.getNumeroParcelas());
+        dto.setValorEntrada(venda.getValorEntrada());
+        dto.setValorParcela(venda.getValorParcela());
+        dto.setBandeiraCartao(venda.getBandeiraCartao());
+        dto.setUltimosDigitos(venda.getUltimosDigitos());
+        
         return dto;
     }
 }

@@ -26,4 +26,12 @@ public class VendaDTO {
     private BigDecimal total;
     private String status;
     private LocalDateTime createdAt;
+    
+    // Campos de pagamento
+    private String formaPagamento;
+    private Integer numeroParcelas;
+    private BigDecimal valorEntrada;
+    private BigDecimal valorParcela;
+    private String bandeiraCartao;
+    private String ultimosDigitos;
 }

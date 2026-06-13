@@ -48,6 +48,25 @@ public class Venda {
     @Builder.Default
     private String status = "PENDENTE";
     
+    // Campos de pagamento
+    @Column(name = "forma_pagamento")
+    private String formaPagamento;
+    
+    @Column(name = "numero_parcelas")
+    private Integer numeroParcelas;
+    
+    @Column(name = "valor_entrada")
+    private BigDecimal valorEntrada;
+    
+    @Column(name = "valor_parcela")
+    private BigDecimal valorParcela;
+    
+    @Column(name = "bandeira_cartao")
+    private String bandeiraCartao;
+    
+    @Column(name = "ultimos_digitos")
+    private String ultimosDigitos;
+    
     @Builder.Default
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();

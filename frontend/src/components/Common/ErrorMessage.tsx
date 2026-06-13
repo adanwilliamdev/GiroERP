@@ -1,6 +1,3 @@
-
-### **11. frontend/src/components/Common/ErrorMessage.tsx**
-```tsx
 import React from 'react';
 import { AlertCircle } from 'lucide-react';
 

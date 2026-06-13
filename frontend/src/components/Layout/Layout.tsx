@@ -9,7 +9,6 @@ const Layout: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Mobile menu button */}
       <button
         onClick={() => setSidebarOpen(true)}
         className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-md"
@@ -17,15 +16,13 @@ const Layout: React.FC = () => {
         <Menu size={20} />
       </button>
       
-      {/* Sidebar */}
       <div className={`
         fixed left-0 top-0 h-full z-40 transition-transform duration-300
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        <Sidebar onClose={() => setSidebarOpen(false)} />
+        <Sidebar />
       </div>
       
-      {/* Overlay */}
       {sidebarOpen && (
         <div 
           className="fixed inset-0 bg-black/30 z-30 lg:hidden"
@@ -33,7 +30,6 @@ const Layout: React.FC = () => {
         />
       )}
       
-      {/* Main content */}
       <div className="lg:ml-64">
         <Header />
         <main className="p-6 animate-fade-in">

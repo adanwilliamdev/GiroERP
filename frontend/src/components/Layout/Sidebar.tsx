@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Package, Users, ShoppingCart, BarChart3, Settings, TrendingUp, LogOut, DollarSign, Database, Shield } from 'lucide-react';
+import { LayoutDashboard, Package, Users, ShoppingCart, Settings, TrendingUp, LogOut } from 'lucide-react';
 
 const Sidebar: React.FC = () => {
   const navigate = useNavigate();
@@ -15,10 +15,6 @@ const Sidebar: React.FC = () => {
     { path: '/produtos', icon: Package, label: 'Produtos' },
     { path: '/clientes', icon: Users, label: 'Clientes' },
     { path: '/vendas', icon: ShoppingCart, label: 'Vendas' },
-    { path: '/relatorios', icon: BarChart3, label: 'Relatórios' },
-    { path: '/financeiro', icon: DollarSign, label: 'Financeiro' },
-    { path: '/usuarios', icon: Shield, label: 'Usuários' },
-    { path: '/backup', icon: Database, label: 'Backup' },
     { path: '/configuracoes', icon: Settings, label: 'Configurações' },
   ];
 
@@ -26,7 +22,7 @@ const Sidebar: React.FC = () => {
     <aside className="sidebar">
       <div className="p-5 border-b border-gray-800">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center">
             <TrendingUp className="w-4 h-4 text-white" />
           </div>
           <div>

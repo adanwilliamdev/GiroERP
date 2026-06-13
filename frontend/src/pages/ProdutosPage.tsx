@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Pencil, Trash2, Search } from 'lucide-react';
+import { Plus, Pencil, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { produtoService } from '../services/produto.service';
-import { Produto, PageResponse } from '../types';
+import { Produto } from '../types';
 import ProdutoModal from '../components/Produtos/ProdutoModal';
 import ConfirmDialog from '../components/Common/ConfirmDialog';
 
@@ -21,8 +21,9 @@ const ProdutosPage: React.FC = () => {
   }, [page]);
 
   const loadProdutos = async () => {
+    setLoading(true);
     try {
-      const response: PageResponse<Produto> = await produtoService.findAll(page);
+      const response = await produtoService.findAll(page);
       setProdutos(response.content);
       setTotalPages(response.totalPages);
     } catch (error) {
@@ -64,16 +65,6 @@ const ProdutosPage: React.FC = () => {
     }
   };
 
-  const openEditModal = (produto: Produto) => {
-    setSelectedProduto(produto);
-    setModalOpen(true);
-  };
-
-  const openDeleteConfirm = (id: number) => {
-    setProdutoToDelete(id);
-    setConfirmOpen(true);
-  };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -83,18 +74,14 @@ const ProdutosPage: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className="animate-fade-in">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Produtos</h1>
-        <button
-          onClick={() => {
-            setSelectedProduto(null);
-            setModalOpen(true);
-          }}
-          className="btn-primary flex items-center gap-2"
-        >
-          <Plus size={20} />
-          Novo Produto
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Produtos</h1>
+          <p className="text-gray-500 mt-1">Gerencie seu catálogo de produtos</p>
+        </div>
+        <button onClick={() => { setSelectedProduto(null); setModalOpen(true); }} className="btn-primary flex items-center gap-2">
+          <Plus size={20} /> Novo Produto
         </button>
       </div>
 
@@ -102,85 +89,41 @@ const ProdutosPage: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Código</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoria</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Preço</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estoque</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+              <tr><th className="px-6 py-3 text-left text-xs font-medium text-gray-500">Código</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">Nome</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">Categoria</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">Preço</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">Estoque</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">Ações</th>
+              </tr></thead>
+            <tbody className="divide-y divide-gray-200">
               {produtos.map((produto) => (
-                <tr key={produto.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{produto.codigo}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{produto.nome}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{produto.categoria}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    R$ {produto.preco.toFixed(2)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{produto.estoque}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button
-                      onClick={() => openEditModal(produto)}
-                      className="text-blue-600 hover:text-blue-900 mr-3"
-                    >
-                      <Pencil size={18} />
-                    </button>
-                    <button
-                      onClick={() => openDeleteConfirm(produto.id)}
-                      className="text-red-600 hover:text-red-900"
-                    >
-                      <Trash2 size={18} />
-                    </button>
+                <tr key={produto.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 text-sm text-gray-900">{produto.codigo}</td>
+                  <td className="px-6 py-4 text-sm text-gray-900">{produto.nome}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{produto.categoria}</td>
+                  <td className="px-6 py-4 text-sm text-gray-900">R$ {produto.preco.toFixed(2)}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{produto.estoque}</td>
+                  <td className="px-6 py-4">
+                    <button onClick={() => { setSelectedProduto(produto); setModalOpen(true); }} className="text-blue-600 hover:text-blue-800 mr-3"><Pencil size={18} /></button>
+                    <button onClick={() => { setProdutoToDelete(produto.id); setConfirmOpen(true); }} className="text-red-600 hover:text-red-800"><Trash2 size={18} /></button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-
         {totalPages > 1 && (
           <div className="flex justify-center gap-2 mt-6">
-            <button
-              onClick={() => setPage(p => Math.max(0, p - 1))}
-              disabled={page === 0}
-              className="px-3 py-1 border rounded disabled:opacity-50"
-            >
-              Anterior
-            </button>
-            <span className="px-3 py-1">
-              Página {page + 1} de {totalPages}
-            </span>
-            <button
-              onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
-              disabled={page === totalPages - 1}
-              className="px-3 py-1 border rounded disabled:opacity-50"
-            >
-              Próxima
-            </button>
+            <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0} className="px-3 py-1 border rounded disabled:opacity-50">Anterior</button>
+            <span className="px-3 py-1">Página {page + 1} de {totalPages}</span>
+            <button onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={page === totalPages - 1} className="px-3 py-1 border rounded disabled:opacity-50">Próxima</button>
           </div>
         )}
       </div>
 
-      <ProdutoModal
-        isOpen={modalOpen}
-        onClose={() => {
-          setModalOpen(false);
-          setSelectedProduto(null);
-        }}
-        onSave={handleSave}
-        produto={selectedProduto}
-      />
-
-      <ConfirmDialog
-        isOpen={confirmOpen}
-        onClose={() => setConfirmOpen(false)}
-        onConfirm={handleDelete}
-        title="Confirmar exclusão"
-        message="Tem certeza que deseja excluir este produto?"
-      />
+      <ProdutoModal isOpen={modalOpen} onClose={() => { setModalOpen(false); setSelectedProduto(null); }} onSave={handleSave} produto={selectedProduto} />
+      <ConfirmDialog isOpen={confirmOpen} onClose={() => setConfirmOpen(false)} onConfirm={handleDelete} title="Confirmar exclusão" message="Tem certeza que deseja excluir este produto?" />
     </div>
   );
 };

@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
-import { ThemeProvider } from './contexts/ThemeContext';
 import { useAuth } from './hooks/useAuth';
 import Layout from './components/Layout/Layout';
 import Login from './pages/Login';
@@ -52,10 +51,8 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <ThemeProvider>
-          <Toaster position="top-right" />
-          <AppRoutes />
-        </ThemeProvider>
+        <Toaster position="top-right" />
+        <AppRoutes />
       </AuthProvider>
     </Router>
   );

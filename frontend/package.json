@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.19",
     "@heroicons/react": "^2.0.18",
+    "@mui/x-charts": "^9.5.0",
     "@types/file-saver": "^2.0.7",
     "axios": "^1.17.0",
     "clsx": "^2.1.1",

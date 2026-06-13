@@ -1,0 +1,75 @@
+/* Dark mode styles */
+.dark {
+  color-scheme: dark;
+}
+
+.dark body {
+  background-color: #0f172a;
+}
+
+.dark .bg-white {
+  background-color: #1e293b;
+}
+
+.dark .bg-gray-50,
+.dark .bg-secondary-50 {
+  background-color: #0f172a;
+}
+
+.dark .text-gray-900,
+.dark .text-secondary-900 {
+  color: #f1f5f9;
+}
+
+.dark .text-gray-600,
+.dark .text-secondary-600 {
+  color: #94a3b8;
+}
+
+.dark .text-gray-500,
+.dark .text-secondary-500 {
+  color: #64748b;
+}
+
+.dark .border-gray-200,
+.dark .border-secondary-100 {
+  border-color: #334155;
+}
+
+.dark .card,
+.dark .card-stats {
+  background-color: #1e293b;
+  border-color: #334155;
+}
+
+.dark .input-field {
+  background-color: #0f172a;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+.dark .input-field::placeholder {
+  color: #64748b;
+}
+
+.dark .btn-secondary {
+  background-color: #334155;
+  border-color: #475569;
+  color: #f1f5f9;
+}
+
+.dark .btn-secondary:hover {
+  background-color: #475569;
+}
+
+.dark .bg-gray-100 {
+  background-color: #334155;
+}
+
+.dark .hover\:bg-gray-50:hover {
+  background-color: #334155;
+}
+
+.dark .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #334155;
+}

@@ -1,0 +1,56 @@
+﻿version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: giroerp-postgres
+    environment:
+      POSTGRES_DB: giroerp
+      POSTGRES_USER: giroerp
+      POSTGRES_PASSWORD: giroerp123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - giroerp-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U giroerp"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    container_name: giroerp-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/giroerp
+      SPRING_DATASOURCE_USERNAME: giroerp
+      SPRING_DATASOURCE_PASSWORD: giroerp123
+      JWT_SECRET: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - giroerp-network
+
+  frontend:
+    build: ./frontend
+    container_name: giroerp-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_API_URL: http://localhost:8080/api
+    depends_on:
+      - backend
+    networks:
+      - giroerp-network
+
+networks:
+  giroerp-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

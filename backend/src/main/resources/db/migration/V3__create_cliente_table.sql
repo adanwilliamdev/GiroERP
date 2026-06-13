@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS clientes (
+    id BIGSERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    cpf_cnpj VARCHAR(20) UNIQUE,
+    email VARCHAR(100),
+    telefone VARCHAR(20),
+    endereco VARCHAR(200),
+    cidade VARCHAR(50),
+    estado VARCHAR(2),
+    cep VARCHAR(10),
+    ativo BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

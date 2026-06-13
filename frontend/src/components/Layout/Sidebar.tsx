@@ -1,6 +1,9 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Package, Users, ShoppingCart, Settings, TrendingUp, LogOut } from 'lucide-react';
+import { 
+  LayoutDashboard, Package, Users, ShoppingCart, Settings, 
+  TrendingUp, LogOut, Database, Shield 
+} from 'lucide-react';
 
 const Sidebar: React.FC = () => {
   const navigate = useNavigate();
@@ -15,6 +18,8 @@ const Sidebar: React.FC = () => {
     { path: '/produtos', icon: Package, label: 'Produtos' },
     { path: '/clientes', icon: Users, label: 'Clientes' },
     { path: '/vendas', icon: ShoppingCart, label: 'Vendas' },
+    { path: '/usuarios', icon: Shield, label: 'Usuários' },
+    { path: '/backup', icon: Database, label: 'Backup' },
     { path: '/configuracoes', icon: Settings, label: 'Configurações' },
   ];
 

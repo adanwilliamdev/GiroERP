@@ -11,6 +11,8 @@ import ClientesPage from './pages/ClientesPage';
 import VendasPage from './pages/VendasPage';
 import ConfiguracoesPage from './pages/ConfiguracoesPage';
 import NovaVendaPage from './pages/Venda/NovaVendaPage';
+import UsuariosPage from './pages/UsuariosPage';
+import BackupPage from './pages/BackupPage';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -33,6 +35,8 @@ function AppRoutes() {
         <Route path="clientes" element={<ClientesPage />} />
         <Route path="vendas" element={<VendasPage />} />
         <Route path="vendas/nova" element={<NovaVendaPage />} />
+        <Route path="usuarios" element={<UsuariosPage />} />
+        <Route path="backup" element={<BackupPage />} />
         <Route path="configuracoes" element={<ConfiguracoesPage />} />
       </Route>
     </Routes>

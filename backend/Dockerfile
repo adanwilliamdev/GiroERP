@@ -1,4 +1,5 @@
-﻿FROM openjdk:21-jdk-slim AS build
+﻿# Dockerfile atualizado (use este!)
+FROM eclipse-temurin:21-jdk-alpine AS build
 WORKDIR /app
 
 # Copiar arquivos do Maven
@@ -6,7 +7,7 @@ COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
 
-# Baixar dependências (cache)
+# Baixar dependências
 RUN ./mvnw dependency:go-offline -B
 
 # Copiar código fonte e compilar
@@ -14,16 +15,16 @@ COPY src src
 RUN ./mvnw package -DskipTests
 
 # ============================================
-# IMAGEM FINAL
+# IMAGEM FINAL (mais leve)
 # ============================================
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
 # Copiar JAR da etapa de build
 COPY --from=build /app/target/*.jar app.jar
 
 # Criar usuário não-root para segurança
-RUN groupadd -r giroerp && useradd -r -g giroerp giroerp
+RUN addgroup -S giroerp && adduser -S giroerp -G giroerp
 USER giroerp
 
 EXPOSE 8080

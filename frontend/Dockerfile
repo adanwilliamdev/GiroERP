@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copiar apenas os arquivos de dependência primeiro (cache)
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm install --only=production
 
 # Copiar o resto do código
 COPY . .
@@ -22,11 +22,9 @@ FROM nginx:alpine
 # Copiar os arquivos buildados para o Nginx
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Copiar configuração do Nginx (se existir)
+# Copiar configuração do Nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expor a porta 3000
 EXPOSE 3000
 
-# Iniciar o Nginx
 CMD ["nginx", "-g", "daemon off;"]

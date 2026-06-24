@@ -1,21 +1,20 @@
 ﻿# ============================================
-# ESTÁGIO DE BUILD (OTIMIZADO E CORRETO)
+# ESTÁGIO DE BUILD
 # ============================================
 FROM eclipse-temurin:21-jdk-alpine AS build
 WORKDIR /app
 
-# 1. Copiar APENAS o pom.xml e o mvnw PRIMEIRO (para cache)
+# 1. Copiar arquivos essenciais primeiro
 COPY backend/pom.xml .
 COPY backend/mvnw .
-COPY backend/.mvn .mvn
 
 # 2. Dar permissão de execução para o mvnw
 RUN chmod +x mvnw
 
-# 3. Baixar dependências (isso vai ser cacheadado)
+# 3. Baixar dependências (cache)
 RUN ./mvnw dependency:go-offline -B || true
 
-# 4. Agora copiar o resto do código
+# 4. Copiar o resto do código
 COPY backend/ .
 
 # 5. Compilar

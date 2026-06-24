@@ -1,24 +1,16 @@
 ﻿# ============================================
-# ESTÁGIO DE BUILD
+# ESTÁGIO DE BUILD (COM MAVEN OFICIAL)
 # ============================================
-FROM eclipse-temurin:21-jdk-alpine AS build
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
 
-# 1. Copiar arquivos essenciais primeiro
+# Copiar pom.xml e baixar dependências (com cache)
 COPY backend/pom.xml .
-COPY backend/mvnw .
+RUN mvn dependency:go-offline -B
 
-# 2. Dar permissão de execução para o mvnw
-RUN chmod +x mvnw
-
-# 3. Baixar dependências (cache)
-RUN ./mvnw dependency:go-offline -B || true
-
-# 4. Copiar o resto do código
-COPY backend/ .
-
-# 5. Compilar
-RUN ./mvnw package -DskipTests
+# Copiar código fonte e compilar
+COPY backend/src ./src
+RUN mvn package -DskipTests
 
 # ============================================
 # IMAGEM FINAL
@@ -26,8 +18,10 @@ RUN ./mvnw package -DskipTests
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
+# Copiar JAR da etapa de build
 COPY --from=build /app/target/*.jar app.jar
 
+# Criar usuário não-root para segurança
 RUN addgroup -S giroerp && adduser -S giroerp -G giroerp
 USER giroerp
 

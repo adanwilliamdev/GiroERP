@@ -6,12 +6,14 @@ WORKDIR /app
 
 # Copiar apenas os arquivos de dependência primeiro (cache)
 COPY package*.json ./
-RUN npm install --only=production
+
+# Instalar TODAS as dependências (incluindo devDependencies)
+RUN npm install
 
 # Copiar o resto do código
 COPY . .
 
-# Build da aplicação
+# Build da aplicação (TypeScript + Vite)
 RUN npm run build
 
 # ============================================

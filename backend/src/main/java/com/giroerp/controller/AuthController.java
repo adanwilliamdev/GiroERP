@@ -1,11 +1,9 @@
 package com.giroerp.controller;
 
-import com.giroerp.dto.LoginRequest;
-import com.giroerp.dto.LoginResponse;
+import com.giroerp.dto.AuthRequest;
+import com.giroerp.dto.AuthResponse;
+import com.giroerp.dto.RegisterRequest;
 import com.giroerp.service.AuthService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,14 +11,23 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@Tag(name = "Autenticação", description = "Endpoints de autenticação")
+@CrossOrigin(origins = "*") // Adicionar esta anotação temporariamente
 public class AuthController {
 
     private final AuthService authService;
 
     @PostMapping("/login")
-    @Operation(summary = "Autenticar usuário", description = "Realiza login e retorna token JWT")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
         return ResponseEntity.ok(authService.login(request));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
+        return ResponseEntity.ok(authService.register(request));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(@RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(authService.getCurrentUser(token));
     }
 }

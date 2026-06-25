@@ -22,6 +22,8 @@
         <java.version>21</java.version>
         <jjwt.version>0.12.3</jjwt.version>
         <lombok.version>1.18.30</lombok.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -78,7 +80,7 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
 
-        <!-- Lombok - ESSENCIAL -->
+        <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -103,7 +105,7 @@
 
     <build>
         <plugins>
-            <!-- COMPILER PLUGIN COM LOMBOK -->
+            <!-- COMPILER PLUGIN -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -111,6 +113,7 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <fork>true</fork>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
@@ -127,7 +130,10 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <excludes>
-                        <!-- NÃO EXCLUIR O LOMBOK -->
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
                     </excludes>
                 </configuration>
             </plugin>

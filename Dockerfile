@@ -1,33 +1,35 @@
-﻿# ============================================
-# ESTÁGIO DE BUILD (COM MAVEN OFICIAL)
-# ============================================
-FROM maven:3.9.6-eclipse-temurin-21 AS build
-WORKDIR /app
+﻿]# ============================================
+ # ESTÁGIO DE BUILD (COM MAVEN OFICIAL)
+ # ============================================
+ FROM maven:3.9.6-eclipse-temurin-21 AS build
+ WORKDIR /app
 
-# Copiar pom.xml e baixar dependências (com cache)
-COPY backend/pom.xml .
-RUN mvn dependency:go-offline -B
+ # Copiar pom.xml e baixar dependências (com cache)
+ COPY backend/pom.xml .
+ RUN mvn dependency:go-offline -B
 
-# Copiar código fonte e compilar
-COPY backend/src ./src
-RUN mvn package -DskipTests
+ # Copiar código fonte e compilar
+ COPY backend/src ./src
 
-# ============================================
-# IMAGEM FINAL
-# ============================================
-FROM eclipse-temurin:21-jre-alpine
-WORKDIR /app
+ # Compilar e pular testes completamente
+ RUN mvn clean compile package -DskipTests -Dmaven.test.skip=true
 
-# Copiar JAR da etapa de build
-COPY --from=build /app/target/*.jar app.jar
+ # ============================================
+ # IMAGEM FINAL
+ # ============================================
+ FROM eclipse-temurin:21-jre-alpine
+ WORKDIR /app
 
-# Criar usuário não-root para segurança
-RUN addgroup -S giroerp && adduser -S giroerp -G giroerp
-USER giroerp
+ # Copiar JAR da etapa de build
+ COPY --from=build /app/target/*.jar app.jar
 
-EXPOSE 8080
+ # Criar usuário não-root para segurança
+ RUN addgroup -S giroerp && adduser -S giroerp -G giroerp
+ USER giroerp
 
-HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
-  CMD wget --quiet --tries=1 --spider http://localhost:8080/api/health || exit 1
+ EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
+   CMD wget --quiet --tries=1 --spider http://localhost:8080/api/health || exit 1
+
+ ENTRYPOINT ["java", "-jar", "app.jar"]

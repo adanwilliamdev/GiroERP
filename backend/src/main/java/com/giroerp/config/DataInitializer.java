@@ -15,16 +15,16 @@ public class DataInitializer implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void run(String... args) throws Exception {
-        if (usuarioRepository.count() == 0) {
-            Usuario admin = Usuario.builder()
-                .username("admin")
-                .email("admin@giroerp.com")
-                .password(passwordEncoder.encode("admin123"))
-                .nome("Administrador")
-                .role(Usuario.Role.ADMIN)
-                .ativo(true)
-                .build();
+    public void run(String... args) {
+        // Criar usuário admin se não existir
+        if (!usuarioRepository.existsByUsername("admin")) {
+            Usuario admin = new Usuario();
+            admin.setUsername("admin");
+            admin.setEmail("admin@giroerp.com");
+            admin.setPassword(passwordEncoder.encode("admin123"));
+            admin.setNome("Administrador");
+            admin.setRole("ADMIN");
+            admin.setAtivo(true);
             usuarioRepository.save(admin);
             System.out.println("✅ Usuário admin criado com sucesso!");
         }

@@ -68,7 +68,7 @@ Frontend (React + TypeScript)
 ```bash
 cd backend
 mvn clean package -DskipTests
-java -jar target/giroerp.jar
+java -jar target/giroerp-1.0.0.jar
 ```
 
 Servidor:

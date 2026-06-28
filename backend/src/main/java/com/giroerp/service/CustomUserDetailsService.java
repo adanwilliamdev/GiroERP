@@ -1,5 +1,6 @@
 package com.giroerp.service;
 
+import com.giroerp.model.Usuario;
 import com.giroerp.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

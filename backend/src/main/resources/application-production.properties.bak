@@ -5,32 +5,30 @@ server.port=${PORT:8080}
 server.servlet.context-path=/api
 
 # ============================================
-# H2 DATABASE
+# POSTGRES DATABASE
 # ============================================
-spring.datasource.url=jdbc:h2:file:/tmp/giroerp;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL
-spring.datasource.driver-class-name=org.h2.Driver
-spring.datasource.username=sa
-spring.datasource.password=
+spring.datasource.url=jdbc:postgresql://localhost:5432/postgres
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.datasource.username=postgres
+spring.datasource.password=9857Dudu
 
 # ============================================
 # JPA
 # ============================================
-spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
 spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=false
+spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
-
-# ============================================
-# H2 CONSOLE
-# ============================================
-spring.h2.console.enabled=true
-spring.h2.console.path=/h2-console
-spring.h2.console.settings.web-allow-others=true
 
 # ============================================
 # FLYWAY (desabilitado)
 # ============================================
 spring.flyway.enabled=false
+
+# ============================================
+# H2 CONSOLE (desabilitado)
+# ============================================
+spring.h2.console.enabled=false
 
 # ============================================
 # JWT

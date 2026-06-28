@@ -1,6 +1,4 @@
-﻿version: '3.8'
-
-services:
+﻿services:
   postgres:
     image: postgres:16-alpine
     container_name: giroerp-postgres
@@ -21,7 +19,9 @@ services:
       retries: 5
 
   backend:
-    build: ./backend
+    build:
+      context: ./backend      # <-- Caminho para a pasta backend
+      dockerfile: Dockerfile  # <-- Nome do Dockerfile (já existe)
     container_name: giroerp-backend
     ports:
       - "8080:8080"
@@ -37,7 +37,9 @@ services:
       - giroerp-network
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend      # <-- Caminho para a pasta frontend
+      dockerfile: Dockerfile  # <-- Nome do Dockerfile (já existe)
     container_name: giroerp-frontend
     ports:
       - "3000:3000"
